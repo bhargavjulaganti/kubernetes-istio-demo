@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  kafka:
+    image: bitnami/kafka:latest
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_OPTS="-Dapi.version.request=false -Drequest.timeout.ms=5000 -Dsocket.timeout.ms=10000"
+    networks:
+      - kafka-network
+    depends_on:
+      - zookeeper
+
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    environment:
+      - ZOO_ENABLE_AUTH=no
+      - ZOO_CLIENT_PORT=2181
+    networks:
+      - kafka-network
+
+networks:
+  kafka-network:
+    driver: bridge

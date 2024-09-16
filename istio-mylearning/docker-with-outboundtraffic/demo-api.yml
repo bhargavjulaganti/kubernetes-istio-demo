@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-service
+  labels:
+    app: demo
+    service: demo
+spec:
+  ports:
+  - port: 8080
+    name: http
+  selector:
+    app: demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-v4
+  labels:
+    app: demo
+    version: v4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+      version: v4
+  template:
+    metadata:
+      labels:
+        app: demo
+        version: v4
+    spec:
+      containers:
+      - name: demo
+        image: julagantib/demo-api:v4.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080

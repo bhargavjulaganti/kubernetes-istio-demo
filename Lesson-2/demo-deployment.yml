@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-deployment
+  labels:
+    app: demo-app
+spec:
+  replicas: 3  # Number of replicas/pods
+  selector:
+    matchLabels:
+      app: demo-app
+  template:
+    metadata:
+      labels:
+        app: demo-app
+    spec:
+      containers:
+      - name: demo-container
+        image: julagantib/demo-api:v1.0  # Container image to use
+        ports:
+        - containerPort: 80  # Port to expose
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-service
+spec:
+  selector:
+    app: demo-app  # Matches the label in the Deployment
+  ports:
+    - protocol: TCP
+      port: 80  # Port that the service will expose
+      targetPort: 8080  # Port that the container listens on
+      nodePort: 30007  # Optional: Specify a static port number to expose on the node
+  type: NodePort  # Type of service to expose the app publicly
