@@ -1,39 +1,39 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: demo-service
+  name: mock-service
   labels:
-    app: demo
-    service: demo
+    app: mock
+    service: mock
 spec:
   ports:
   - port: 8080
     name: http
   selector:
-    app: demo
+    app: mock
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-v6
+  name: mock-v1
   labels:
-    app: demo
-    version: v6
+    app: mock
+    version: v1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: demo
-      version: v6
+      app: mock
+      version: v1
   template:
     metadata:
       labels:
-        app: demo
-        version: v6
+        app: mock
+        version: v1
     spec:
       containers:
-      - name: demo
-        image: julagantib/demo-api:v6.0
+      - name: mock
+        image: julagantib/mock-api:v1.0
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080

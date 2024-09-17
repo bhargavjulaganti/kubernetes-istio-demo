@@ -16,23 +16,32 @@ namespace Demo.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] string appId)
         {
             // Send a GET request to the external service
-            using (HttpResponseMessage response = await _jsonWebServerClient.GetAsync("/posts/1"))
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Get, "/posts/1"))
             {
-                if (response.IsSuccessStatusCode)
+                Console.WriteLine($"The appId is **********************************" + appId);
+                // Add the x-appiid header
+                requestMessage.Headers.Add("X-Custom-Header", appId);
+
+                // Send the request
+                using (HttpResponseMessage response = await _jsonWebServerClient.SendAsync(requestMessage))
                 {
-                    // Read the content of the response
-                    var content = await response.Content.ReadAsStringAsync();
-                    return Ok(content);  // Return the content as the response
-                }
-                else
-                {
-                    // Handle unsuccessful responses
-                    return StatusCode((int)response.StatusCode, "Error fetching data from external service.");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Read the content of the response
+                        var content = await response.Content.ReadAsStringAsync();
+                        return Ok(content);  // Return the content as the response
+                    }
+                    else
+                    {
+                        // Handle unsuccessful responses
+                        return StatusCode((int)response.StatusCode, "Error fetching data from external service.");
+                    }
                 }
             }
+
         }
     }
 }

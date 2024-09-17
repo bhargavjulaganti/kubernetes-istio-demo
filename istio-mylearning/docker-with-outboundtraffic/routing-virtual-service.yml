@@ -1,0 +1,47 @@
+# apiVersion: networking.istio.io/v1alpha3
+# kind: VirtualService
+# metadata:
+#   name: external-service-redirect
+# spec:
+#   hosts:
+#   - "jsonplaceholder.typicode.com"  # The external HTTP service
+#   http:
+#   - match:
+#     - headers:
+#         X-Custom-Header:
+#           exact: "1234"  # Use X-Custom-Header with value '1234'
+#     route:
+#     - destination:
+#         host: mock-service.default.svc.cluster.local  # Internal mock service to route to
+#         port:
+#           number: 80
+#   - route:
+#     - destination:
+#         host: jsonplaceholder.typicode.com  # Default route for external service
+#         port:
+#           number: 80  # Use HTTP port 80 instead of 443
+
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: test-external-service-redirect
+spec:
+  hosts:
+  - "jsonplaceholder.typicode.com"  # External HTTP service
+  http:
+  - match:
+    - headers:
+        X-Custom-Header:
+          exact: "1234"  # Ensure the header value is '1234'
+    route:
+    - destination:
+        host: mock-service.default.svc.cluster.local  # Internal mock service
+        port:
+          number: 8080
+  - route:
+    - destination:
+        host: jsonplaceholder.typicode.com  # Pass through to external service if header doesn't match
+        port:
+          number: 80        
+

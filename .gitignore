@@ -1,2 +1,5 @@
 demo-api/bin/Debug/net8.0/*
 demo-api/obj/*
+mock-api/mockapi/obj/*
+mock-api/bin/Debug/net8.0/*
+.DS_Store

@@ -13,7 +13,7 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddHttpClient();
 
 builder.Services.AddHttpClient("Sample", client => {
-    client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com");
+    client.BaseAddress = new Uri("http://jsonplaceholder.typicode.com");
 });
 
 var app = builder.Build();
